@@ -22,9 +22,19 @@ def robo():
                 delay()
         time.sleep(INTERVALO_CICLO_MIN * 60)
 
-@app.before_first_request
-def start():
-    threading.Thread(target=robo, daemon=True).start()
+import threading
+
+_robo_started = False
+
+def iniciar_robo():
+    global _robo_started
+    if not _robo_started:
+        _robo_started = True
+        threading.Thread(target=robo, daemon=True).start()
+        print("🤖 Robô iniciado")
+
+iniciar_robo()
+
 
 @app.route("/")
 def index():
